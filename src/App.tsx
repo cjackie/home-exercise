@@ -1,10 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
+import {Header} from "./stories/Header";
 import './App.css';
 
 function App() {
   return (
     <div className="App">
+      <Header onLogin={() => {}} onLogout={() => {}} onCreateAccount= {() => {}}/>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
