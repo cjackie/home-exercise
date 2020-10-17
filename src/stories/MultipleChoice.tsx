@@ -1,9 +1,13 @@
 import React from 'react';
 import Flexbox from 'flexbox-react';
 
+export interface Choice {
+    choiceId: string; text: string; onClick: (choiceId: string) => void
+};
+
 export interface MultipleChoiceProps {
     headerText: string;
-    choices: [{ choiceId: string, text: string, onClick: (choiceId: string) => void }];
+    choices: Array<Choice>;
 };
 
 export const MultipleChoice: React.FC<MultipleChoiceProps> = ({ headerText, choices }) => {
