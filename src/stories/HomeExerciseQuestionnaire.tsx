@@ -1,30 +1,13 @@
 import React from 'react';
 import { MultipleChoiceTree, MultipleChoiceTreeProps } from './MultipleChoiceTree';
 import { deepclone } from './utils/deepclone';
-
-export enum Goal {
-    STRENGTH,
-    ENDURANCE,
-    AEROBIC,
-}
-
-export enum Time {
-    LITTLE,
-    SOME,
-    A_LOT,
-}
-
-export enum Level {
-    BEGINNER,
-    INTERMEDIATE,
-    ADVANCED,
-}
+import {Level, Goal, Time} from "../utils/Personalization";
 
 export interface Answer {
-    goal?: Goal;
-    time?: Time;
-    level?: Level;
-    passPrescreen?: boolean;
+    goal: Goal;
+    time: Time;
+    level: Level;
+    passPrescreen: boolean;
 }
 
 export interface Props {
@@ -138,7 +121,14 @@ function buildMultipleChoiceTreeProps(onChoice: (choiceId: string) => void): Mul
 
 
 export class HomeExerciseQuestionnaire extends React.Component<Props, State> {
-    state: State = { answer: {} };
+    state: State = {
+        answer: {
+            goal: Goal.UNSPECIFIED,
+            time: Time.UNSPECIFIED,
+            level: Level.UNSPECIFIED,
+            passPrescreen: false,
+        } 
+    };
 
     shouldComponentUpdate(nextProps: Props) {
         return this.props.id !== nextProps.id;
@@ -146,7 +136,7 @@ export class HomeExerciseQuestionnaire extends React.Component<Props, State> {
 
     onChoice(choiceId: string) {
         this.setState((prevState) => {
-            const newState = deepclone(prevState);
+            const newState: State = deepclone(prevState);
             const tokens: Array<string> = choiceId.split("_");
             const nodeId = tokens[0];
             const answerId = tokens[1];
@@ -156,33 +146,41 @@ export class HomeExerciseQuestionnaire extends React.Component<Props, State> {
                     this.props.onFilledOut(deepclone(newState.answer));
                 }
             } else if (nodeId === "2") {
-                const mapping: Map<string, Goal> = new Map<string, Goal>();
-                mapping.set("strength", Goal.STRENGTH);
-                mapping.set("endurance", Goal.ENDURANCE);
-                mapping.set("aerobic", Goal.AEROBIC);
-
-                if (mapping.has(answerId)) {
-                   newState.answer.goal = mapping.get(answerId);
+                switch (answerId) {
+                    case "strength":
+                        newState.answer.goal = Goal.STRENGTH;
+                        break;
+                    case "endurance":
+                        newState.answer.goal = Goal.ENDURANCE;
+                        break;
+                    case "aerobic":
+                        newState.answer.goal = Goal.AEROBIC;
+                        break;
                 }
             } else if (nodeId === "3") {
-                const mapping: Map<string, Time> = new Map<string, Time>();
-                mapping.set("little", Time.LITTLE);
-                mapping.set("some", Time.SOME);
-                mapping.set("alot", Time.A_LOT);
-
-                if (mapping.has(answerId)) {
-                   newState.answer.time = mapping.get(answerId);
+                switch (answerId) {
+                    case "little":
+                        newState.answer.time = Time.LITTLE;
+                        break;
+                    case "some":
+                        newState.answer.time = Time.SOME;
+                        break;
+                    case "alot":
+                        newState.answer.time = Time.A_LOT;
+                        break;
                 }
             } else if (nodeId === "4") {
-                const mapping: Map<string, Level> = new Map<string, Level>();
-                mapping.set("beginner", Level.BEGINNER);
-                mapping.set("intermediate", Level.INTERMEDIATE);
-                mapping.set("advanced", Level.ADVANCED);
-
-                if (mapping.has(answerId)) {
-                   newState.answer.level = mapping.get(answerId);
+                switch (answerId) {
+                    case "beginner":
+                        newState.answer.level = Level.BEGINNER;
+                        break;
+                    case "intermediate":
+                        newState.answer.level = Level.INTERMEDIATE;
+                        break;
+                    case "advanced":
+                        newState.answer.level = Level.ADVANCED;
+                        break;
                 }
-                this.props.onFilledOut(deepclone(newState.answer));
             } 
 
             return newState;
