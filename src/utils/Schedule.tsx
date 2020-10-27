@@ -523,9 +523,15 @@ export function generateHumanSchedule(level: Level, time: Time, goal: Goal): Hum
     for (let setCounter = 0; setCounter < maxNumOfSets; ++setCounter) {
         const curTime: Date = new Date();
         curTime.setUTCSeconds(initialTime.getUTCSeconds() + (setTime + restTime) * setCounter);
-        const humanScheduleRow: HumanScheduleRow = {
+        const exerciseRow: HumanScheduleRow = {
             startTime: curTime,
         };
+        // Rest time
+        const restAt: Date = new Date();
+        restAt.setUTCSeconds(curTime.getUTCSeconds() + restTime);
+        const restRow: HumanScheduleRow = {
+            startTime: restAt,
+        }
 
         if (scheduleTemplate.day1) {
             // Get muscle group key at current set for the day.
@@ -534,7 +540,8 @@ export function generateHumanSchedule(level: Level, time: Time, goal: Goal): Hum
             const curMuscleCounter = muscleCounter.get(muscle) || 0;
             const exercise: Exercise = getExercise(exercises, muscle, curMuscleCounter);
             muscleCounter.set(muscle, curMuscleCounter + 1);
-            humanScheduleRow.monday = `${reps} reps of ${exercise.name}`
+            exerciseRow.monday = `${reps} reps of ${exercise.name}`
+            restRow.monday = `Rest`;
         } else if (scheduleTemplate.day2) {
             // Get muscle group key at current set for the day.
             const muscle: MuscleGroupKey = getMuscleKey(scheduleTemplate.day2, setCounter);
@@ -542,7 +549,8 @@ export function generateHumanSchedule(level: Level, time: Time, goal: Goal): Hum
             const curMuscleCounter = muscleCounter.get(muscle) || 0;
             const exercise: Exercise = getExercise(exercises, muscle, curMuscleCounter);
             muscleCounter.set(muscle, curMuscleCounter + 1);
-            humanScheduleRow.tuesday = `${reps} reps of ${exercise.name}`
+            exerciseRow.tuesday = `${reps} reps of ${exercise.name}`
+            restRow.tuesday = `Rest`;
         } else if (scheduleTemplate.day3) {
             // Get muscle group key at current set for the day.
             const muscle: MuscleGroupKey = getMuscleKey(scheduleTemplate.day3, setCounter);
@@ -550,7 +558,8 @@ export function generateHumanSchedule(level: Level, time: Time, goal: Goal): Hum
             const curMuscleCounter = muscleCounter.get(muscle) || 0;
             const exercise: Exercise = getExercise(exercises, muscle, curMuscleCounter);
             muscleCounter.set(muscle, curMuscleCounter + 1);
-            humanScheduleRow.wednesday = `${reps} reps of ${exercise.name}`
+            exerciseRow.wednesday = `${reps} reps of ${exercise.name}`
+            restRow.wednesday = `Rest`;
         } else if (scheduleTemplate.day4) {
             // Get muscle group key at current set for the day.
             const muscle: MuscleGroupKey = getMuscleKey(scheduleTemplate.day4, setCounter);
@@ -558,7 +567,8 @@ export function generateHumanSchedule(level: Level, time: Time, goal: Goal): Hum
             const curMuscleCounter = muscleCounter.get(muscle) || 0;
             const exercise: Exercise = getExercise(exercises, muscle, curMuscleCounter);
             muscleCounter.set(muscle, curMuscleCounter + 1);
-            humanScheduleRow.thursday = `${reps} reps of ${exercise.name}`
+            exerciseRow.thursday = `${reps} reps of ${exercise.name}`
+            restRow.thursday = `Rest`;
         } else if (scheduleTemplate.day5) {
             // Get muscle group key at current set for the day.
             const muscle: MuscleGroupKey = getMuscleKey(scheduleTemplate.day5, setCounter);
@@ -566,7 +576,8 @@ export function generateHumanSchedule(level: Level, time: Time, goal: Goal): Hum
             const curMuscleCounter = muscleCounter.get(muscle) || 0;
             const exercise: Exercise = getExercise(exercises, muscle, curMuscleCounter);
             muscleCounter.set(muscle, curMuscleCounter + 1);
-            humanScheduleRow.friday = `${reps} reps of ${exercise.name}`
+            exerciseRow.friday = `${reps} reps of ${exercise.name}`
+            restRow.friday = `Rest`;
         } else if (scheduleTemplate.day6) {
             // Get muscle group key at current set for the day.
             const muscle: MuscleGroupKey = getMuscleKey(scheduleTemplate.day6, setCounter);
@@ -574,7 +585,8 @@ export function generateHumanSchedule(level: Level, time: Time, goal: Goal): Hum
             const curMuscleCounter = muscleCounter.get(muscle) || 0;
             const exercise: Exercise = getExercise(exercises, muscle, curMuscleCounter);
             muscleCounter.set(muscle, curMuscleCounter + 1);
-            humanScheduleRow.saturday = `${reps} reps of ${exercise.name}`
+            exerciseRow.saturday = `${reps} reps of ${exercise.name}`
+            restRow.saturday = `Rest`;
         } else if (scheduleTemplate.day7) {
             // Get muscle group key at current set for the day.
             const muscle: MuscleGroupKey = getMuscleKey(scheduleTemplate.day7, setCounter);
@@ -582,9 +594,11 @@ export function generateHumanSchedule(level: Level, time: Time, goal: Goal): Hum
             const curMuscleCounter = muscleCounter.get(muscle) || 0;
             const exercise: Exercise = getExercise(exercises, muscle, curMuscleCounter);
             muscleCounter.set(muscle, curMuscleCounter + 1);
-            humanScheduleRow.sunday = `${reps} reps of ${exercise.name}`
+            exerciseRow.sunday = `${reps} reps of ${exercise.name}`
+            restRow.sunday = `Rest`;
         }
-        humanSchedule.rows.push(humanScheduleRow);
+        humanSchedule.rows.push(exerciseRow);
+        humanSchedule.rows.push(restRow);
     }
 
     return humanSchedule;
