@@ -6,6 +6,7 @@ export interface Props {
     humanSchedule: HumanSchedule;
 }
 
+
 export const HumanScheduleViewer: React.FC<Props> = ({ humanSchedule }) => {
     return (
         <table>
