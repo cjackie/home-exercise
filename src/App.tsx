@@ -1,28 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
-import {Header} from "./stories/Header";
 import './App.css';
+import { HomeExerciseQuestionnaire, Answer } from './stories/HomeExerciseQuestionnaire';
+import { generateHumanSchedule } from './utils/Schedule';
+import { HumanScheduleViewer } from './stories/HumanScheduleViewer';
 
-function App() {
-  return (
-    <div className="App">
-      <Header onLogin={() => {}} onLogout={() => {}} onCreateAccount= {() => {}}/>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+interface Props { }
+interface State {
+  anwser?: Answer;
+}
+
+export class App extends React.Component<Props, State> {
+  state: State = {};
+
+  onAnswer(anwser: Answer) {
+    this.setState(prevState => {
+      return { anwser: anwser };
+    });
+  }
+
+  render() {
+    let content = <div></div>;
+    if (this.state.anwser) {
+      if (!this.state.anwser.passPrescreen) {
+        content = <div>Please pass the prescreen before proceeed.</div>;
+      } else {
+        const humanSchedule = generateHumanSchedule(this.state.anwser.level, this.state.anwser.time, this.state.anwser.goal);
+        content = <HumanScheduleViewer humanSchedule={humanSchedule}></HumanScheduleViewer>;
+      }
+    } else {
+      content = <HomeExerciseQuestionnaire onFilledOut={(answer) => this.onAnswer(answer)} id={"1"}></HomeExerciseQuestionnaire>
+    }
+
+    return (
+      <div className="App">
+        {content}
+      </div>
+    )
+  }
 }
 
 export default App;

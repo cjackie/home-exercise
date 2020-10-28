@@ -1,11 +1,11 @@
 import React from 'react';
-import Flexbox from 'flexbox-react';
 import { HumanSchedule } from '../utils/Schedule';
+
+import './HumanScheduleViewer.css';
 
 export interface Props {
     humanSchedule: HumanSchedule;
 }
-
 
 export const HumanScheduleViewer: React.FC<Props> = ({ humanSchedule }) => {
     return (

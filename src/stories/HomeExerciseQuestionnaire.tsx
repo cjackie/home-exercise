@@ -181,6 +181,7 @@ export class HomeExerciseQuestionnaire extends React.Component<Props, State> {
                         newState.answer.level = Level.ADVANCED;
                         break;
                 }
+                this.props.onFilledOut(deepclone(newState.answer));
             } 
 
             return newState;
