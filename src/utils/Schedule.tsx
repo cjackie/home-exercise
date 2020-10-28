@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { deepclone } from '../stories/utils/deepclone';
 import { Goal, Time, Level } from './Personalization'
 
@@ -507,21 +508,18 @@ export function generateHumanSchedule(level: Level, time: Time, goal: Goal): Hum
         maxNumOfSets = numOfSets > maxNumOfSets ? numOfSets : maxNumOfSets;
     }
 
-    const initialTime: Date = new Date();
-    initialTime.setHours(9, 0, 0);
+    const initialTime = moment("00:00:00", "hh:mm:ss");
     const humanSchedule: HumanSchedule = { rows: [] };
     const muscleCounter: Map<MuscleGroupKey, number> = new Map();
     for (let setCounter = 0; setCounter < maxNumOfSets; ++setCounter) {
-        const curTime: Date = new Date();
-        curTime.setUTCSeconds(initialTime.getUTCSeconds() + (setTime + restTime) * setCounter);
+        const curTime = initialTime.add((setTime + restTime) * setCounter, "s");
         const exerciseRow: HumanScheduleRow = {
-            startTime: curTime,
+            startTime: new Date(curTime.valueOf()),
         };
         // Rest time
-        const restAt: Date = new Date();
-        restAt.setUTCSeconds(curTime.getUTCSeconds() + restTime);
+        const restAt = initialTime.add((setTime + restTime) * setCounter + setTime, "s");
         const restRow: HumanScheduleRow = {
-            startTime: restAt,
+            startTime: new Date(restAt.valueOf()),
         }
 
         if (scheduleTemplate.day1) {
@@ -600,7 +598,7 @@ export function generateHumanSchedule(level: Level, time: Time, goal: Goal): Hum
             exerciseRow.sunday = `${reps} reps of ${exercise.name}`
             restRow.sunday = `Rest`;
         }
-        
+
         humanSchedule.rows.push(exerciseRow);
         humanSchedule.rows.push(restRow);
     }

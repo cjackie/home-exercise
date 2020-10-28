@@ -3,7 +3,6 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 
 import { HumanScheduleViewer, Props as  HumanScheduleViewerProps } from './HumanScheduleViewer';
-import './HumanScheduleViewer.css';
 
 export default {
     title: 'Example/HumanScheduleViewer',

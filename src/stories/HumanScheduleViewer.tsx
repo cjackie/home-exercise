@@ -11,7 +11,7 @@ export const HumanScheduleViewer: React.FC<Props> = ({ humanSchedule }) => {
     return (
         <table>
             <thead>
-                <th></th>
+                <th>Time (minute:second)</th>
                 <th>Monday</th>
                 <th>Tuesday</th>
                 <th>Wednesday</th>
@@ -23,7 +23,7 @@ export const HumanScheduleViewer: React.FC<Props> = ({ humanSchedule }) => {
 
             {humanSchedule.rows.map((row) => {
                 return (<tr>
-                    <td>{`${row.startTime.getHours()}:${row.startTime.getMinutes()}:${row.startTime.getSeconds()}`}</td>
+                    <td>{`${row.startTime.getMinutes()}:${row.startTime.getSeconds()}`}</td>
                     <td>{row.monday}</td>
                     <td>{row.tuesday}</td>
                     <td>{row.wednesday}</td>
