@@ -55,7 +55,7 @@ function buildMultipleChoiceTreeProps(onChoice: (choiceId: string) => void): Mul
                         nextNodeId: {id: "3"},
                     },
                     {
-                        choiceId: "3_aerobic",
+                        choiceId: "2_aerobic",
                         choiceText: "My goal is to lose weight and improve my aerobic capacity.",
                         nextNodeId: {id: "3"},
                     }

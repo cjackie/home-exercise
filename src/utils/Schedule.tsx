@@ -41,8 +41,8 @@ interface ScheduleTemplate {
 }
 
 function generateScheduleTemplate(goal: Goal, time: Time): ScheduleTemplate {
-    const isStrength: boolean = goal == Goal.ENDURANCE || goal == Goal.STRENGTH;
-    const isAerobic: boolean = goal == Goal.AEROBIC;
+    const isStrength: boolean = goal === Goal.ENDURANCE || goal === Goal.STRENGTH;
+    const isAerobic: boolean = goal === Goal.AEROBIC;
     const template: ScheduleTemplate = {};
     if (time === Time.LITTLE && isStrength) {
         const hybridDay: ScheduleTemplateTable = {
@@ -473,7 +473,7 @@ function getExercise(exercises: Array<Exercise>, muscle: MuscleGroupKey, curMusc
 
 export function generateHumanSchedule(level: Level, time: Time, goal: Goal): HumanSchedule {
     const setTime: number = secondsPerSet.get(level)!;
-    const restTime: number = secondsPerSet.get(level)!;
+    const restTime: number = secondsPerRest.get(level)!;
     const reps: number = repsPerSet.get(goal)!;
 
     const scheduleTemplate: ScheduleTemplate = generateScheduleTemplate(goal, time);
@@ -512,12 +512,12 @@ export function generateHumanSchedule(level: Level, time: Time, goal: Goal): Hum
     const humanSchedule: HumanSchedule = { rows: [] };
     const muscleCounter: Map<MuscleGroupKey, number> = new Map();
     for (let setCounter = 0; setCounter < maxNumOfSets; ++setCounter) {
-        const curTime = initialTime.add((setTime + restTime) * setCounter, "s");
+        const curTime = moment(initialTime).add((setTime + restTime) * setCounter, "s");
         const exerciseRow: HumanScheduleRow = {
             startTime: new Date(curTime.valueOf()),
         };
         // Rest time
-        const restAt = initialTime.add((setTime + restTime) * setCounter + setTime, "s");
+        const restAt = moment(initialTime).add((setTime + restTime) * setCounter + setTime, "s");
         const restRow: HumanScheduleRow = {
             startTime: new Date(restAt.valueOf()),
         }

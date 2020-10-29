@@ -1,5 +1,6 @@
 import React from 'react';
 import { HumanSchedule } from '../utils/Schedule';
+import moment from 'moment';
 
 import './HumanScheduleViewer.css';
 
@@ -23,7 +24,7 @@ export const HumanScheduleViewer: React.FC<Props> = ({ humanSchedule }) => {
 
             {humanSchedule.rows.map((row) => {
                 return (<tr>
-                    <td>{`${row.startTime.getMinutes()}:${row.startTime.getSeconds()}`}</td>
+                    <td>{moment(row.startTime).format("mm:ss")}</td>
                     <td>{row.monday}</td>
                     <td>{row.tuesday}</td>
                     <td>{row.wednesday}</td>
