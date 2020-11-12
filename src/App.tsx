@@ -1,43 +1,36 @@
 import React from 'react';
 import './App.css';
-import { HomeExerciseQuestionnaire, Answer } from './stories/HomeExerciseQuestionnaire';
-import { generateHumanSchedule } from './utils/Schedule';
-import { HumanScheduleViewer } from './stories/HumanScheduleViewer';
+import { goalQuestionPath, levelQuestionPath, timeQuestionPath, humanSechedulePath } from './utils/RouterPaths';
+import {
+  Switch,
+  Route,
+} from "react-router-dom";
+import ExercisePrescreeningQuestion from './components/ExercisePrescreeningQuestion';
+import ExerciseGoalQuestion from './components/ExerciseGoalQuestion';
+import ExerciseLevelQuestion from './components/ExerciseLevelQuestion';
+import ExerciseTimeQuestion from './components/ExerciseTimeQuestion';
+import HumanScheduleViewer from './components/HumanScheduleViewer';
 
-
-interface Props { }
-interface State {
-  anwser?: Answer;
-}
-
-export class App extends React.Component<Props, State> {
-  state: State = {};
-
-  onAnswer(anwser: Answer) {
-    this.setState(prevState => {
-      return { anwser: anwser };
-    });
-  }
-
-  render() {
-    let content = <div></div>;
-    if (this.state.anwser) {
-      if (!this.state.anwser.passPrescreen) {
-        content = <div>Please pass the prescreen before proceeed.</div>;
-      } else {
-        const humanSchedule = generateHumanSchedule(this.state.anwser.level, this.state.anwser.time, this.state.anwser.goal);
-        content = <HumanScheduleViewer humanSchedule={humanSchedule}></HumanScheduleViewer>;
-      }
-    } else {
-      content = <HomeExerciseQuestionnaire onFilledOut={(answer) => this.onAnswer(answer)} id={"1"}></HomeExerciseQuestionnaire>
-    }
-
-    return (
-      <div className="App">
-        {content}
-      </div>
-    )
-  }
-}
+export const App: React.FC<{}> = () => {
+  return (
+    <Switch>
+      <Route exact path="/">
+        <ExercisePrescreeningQuestion />
+      </Route>
+      <Route path={goalQuestionPath}>
+        <ExerciseGoalQuestion />
+      </Route>
+      <Route path={timeQuestionPath}>
+        <ExerciseTimeQuestion />
+      </Route>
+      <Route path={levelQuestionPath}>
+        <ExerciseLevelQuestion />
+      </Route>
+      <Route path={humanSechedulePath}>
+        <HumanScheduleViewer />
+      </Route>
+    </Switch>
+  );
+};
 
 export default App;
