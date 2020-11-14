@@ -7,6 +7,8 @@ export interface UpdateExerciseQuestionaire {
   goal?: Goal;
   time?: Time;
   level?: Level;
+  agreeDisclaimer?: boolean;
+  exitQuestionContent?: string;
 }
 
 export const updateExerciseQuestionaire = (content: UpdateExerciseQuestionaire) => {

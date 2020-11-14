@@ -1,27 +1,35 @@
 import { Card, CardActions, CardContent, Typography, Button } from '@material-ui/core';
-import { failPrescreeningPath, goalQuestionPath } from "../utils/RouterPaths";
+import { exitQuestionPath, goalQuestionPath } from "../utils/RouterPaths";
 import { useHistory } from 'react-router-dom';
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux'
 import { updateExerciseQuestionaire } from '../actions/actions'
+import { State as StoreState } from '../reducers';
+
+const mapStateToProps = (state: StoreState) => {
+    return {
+        passPrescreening: state.questionaire.passPrescreening,
+    }
+};
 
 const mapDispatchToProps = {
-    update: (pass: boolean) => {
+    update: (pass: boolean, exitQuestionContent: string) => {
         return updateExerciseQuestionaire({
             passPrescreening: pass,
+            exitQuestionContent,
         })
     },
 };
 
 const connector = connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps,
 );
 
 // The inferred type + customized props
 export type Props = ConnectedProps<typeof connector> & {};
 
-const PureExercisePrescreeningQuestion: React.FC<Props> = ({update}) => {
+const PureExercisePrescreeningQuestion: React.FC<Props> = ({update, passPrescreening}) => {
     const hisotry = useHistory();
     return (
         <Card>
@@ -32,13 +40,17 @@ const PureExercisePrescreeningQuestion: React.FC<Props> = ({update}) => {
             </CardContent>
             <CardActions>
                 <Button onClick={() => {
+                    update(true, "");
                     hisotry.push(goalQuestionPath);
-                    // update(true);
-                }}>Yes</Button>
+                }}
+                color={passPrescreening!== undefined && passPrescreening ? "primary" : "default"}
+                >Yes</Button>
                 <Button onClick={() => {
-                    hisotry.push(failPrescreeningPath);
-                    // update(false);
-                }}>No</Button>
+                    update(false, "Must pass the prescreening before using the program.");
+                    hisotry.push(exitQuestionPath);
+                }}
+                color={passPrescreening!== undefined && !passPrescreening ? "primary" : "default"}
+                >No</Button>
             </CardActions>
         </Card>
     );

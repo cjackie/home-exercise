@@ -1,10 +1,17 @@
-import { Card, CardActions, CardContent, Typography, Button } from '@material-ui/core';
+import { Card, CardActions, CardContent, Typography, Button, Tooltip } from '@material-ui/core';
 import { timeQuestionPath } from "../utils/RouterPaths";
 import { useHistory } from 'react-router-dom';
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux'
 import { updateExerciseQuestionaire } from '../actions/actions'
 import { Goal } from '../utils/Personalization';
+import { State as StoreState } from '../reducers';
+
+const mapStateToProps = (state: StoreState) => {
+    return {
+        goal: state.questionaire.goal,
+    }
+};
 
 const mapDispatchToProps = {
     update: (goal: Goal) => {
@@ -15,14 +22,14 @@ const mapDispatchToProps = {
 };
 
 const connector = connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps,
 );
 
 // The inferred type + customized props
 export type Props = ConnectedProps<typeof connector> & {};
 
-export const PureExerciseGoalQuestion: React.FC<Props> = ({update}) => {
+export const PureExerciseGoalQuestion: React.FC<Props> = ({ update, goal }) => {
     const hisotry = useHistory();
 
     return (
@@ -33,24 +40,42 @@ export const PureExerciseGoalQuestion: React.FC<Props> = ({update}) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button onClick={() => {
-                    hisotry.push(timeQuestionPath);
-                    update(Goal.STRENGTH);
-                }}>My goal is to build up muscle mass and improve my overall "strongness."
+                <Tooltip title='My goal is to build up muscle mass and improve my overall "strongness".' placement="bottom">
+                    <Button
+                        onClick={() => {
+                            hisotry.push(timeQuestionPath);
+                            update(Goal.STRENGTH);
+                        }}
+                        color={goal === Goal.STRENGTH ? "primary" : "default"}
+                    >
+                        Strength
                 </Button>
-                <Button onClick={() => {
-                    hisotry.push(timeQuestionPath);
-                    update(Goal.ENDURANCE);
-                }}>Toning Up: My goal is to shape up my body and improve my muscular endurance.
+                </Tooltip>
+                <Tooltip title="My goal is to shape up my body and improve my muscular endurance." placement="bottom">
+                    <Button
+                        onClick={() => {
+                            hisotry.push(timeQuestionPath);
+                            update(Goal.ENDURANCE);
+                        }}
+                        color={goal === Goal.ENDURANCE ? "primary" : "default"}
+                    >
+                        Toning Up
+                        </Button>
+                </Tooltip>
+                <Tooltip title="My goal is to build up my heart and lung functioning and lose weight." placement="bottom">
+                    <Button
+                        onClick={() => {
+                            hisotry.push(timeQuestionPath);
+                            update(Goal.AEROBIC);
+                        }}
+                        color={goal === Goal.AEROBIC ? "primary" : "default"}
+                    >
+                        Aerobic
                 </Button>
-                <Button onClick={() => {
-                    hisotry.push(timeQuestionPath);
-                    update(Goal.AEROBIC);
-                }}>Aerobic: My goal is to build up my heart and lung functioning and lose weight.
-                </Button>
-            </CardActions>
-        </Card>
+                </Tooltip>
+            </CardActions >
+        </Card >
     );
-}; 
+};
 
 export default connector(PureExerciseGoalQuestion);

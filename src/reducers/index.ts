@@ -6,7 +6,9 @@ interface Questionaire {
     goal: Goal,
     level: Level,
     time: Time,
-    passPrescreen?: Boolean;
+    passPrescreening?: boolean;
+    agreeDisclaimer?: boolean;
+    exitQuestionContent?: string;
 }
 
 export interface State {
@@ -16,27 +18,10 @@ export interface State {
 function questionaireReducer(state: Questionaire, action: any): Questionaire {
     if (action.type === UPDATE_EXERCISE_QUESTIONAIRE) {
         let updateExerciseQuestionaire: UpdateExerciseQuestionaire = action.payload;
-        if (updateExerciseQuestionaire.goal !== undefined) {
+        if (updateExerciseQuestionaire !== undefined) {
             return {
                 ...state,
-                goal: updateExerciseQuestionaire.goal
-            };
-
-        } else if (updateExerciseQuestionaire.level !== undefined) {
-            return {
-                ...state,
-                level: updateExerciseQuestionaire.level
-            };
-        } else if (updateExerciseQuestionaire.time !== undefined) {
-            return {
-                ...state,
-                time: updateExerciseQuestionaire.time
-            };
-
-        } else if (updateExerciseQuestionaire.passPrescreening !== undefined) {
-            return {
-                ...state,
-                passPrescreen: updateExerciseQuestionaire.passPrescreening
+                ...updateExerciseQuestionaire,
             };
         }
     }
