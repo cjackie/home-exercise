@@ -1,3 +1,4 @@
+import { Level } from "./Personalization";
 
 export enum MuscleGroupKey {
     UNSPECIFIED,
@@ -8,8 +9,20 @@ export enum MuscleGroupKey {
     AEROBIC,
 }
 
+export interface ScheduleTemplateRow {
+    exercise: MuscleGroupKey;
+    numOfSets: number;
+}
+
+export interface ScheduleTemplateTable {
+    rows: Array<ScheduleTemplateRow>;
+    circuits?: number;
+    desc: string;
+}
+
 export interface Exercise {
-    id: string;
+    // must be unique.
     name: string;
     muscle: MuscleGroupKey;
+    level: Level;
 }
